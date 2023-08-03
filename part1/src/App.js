@@ -1,65 +1,29 @@
+import { useState } from 'react'
+
+const Display = props => <div style={{fontSize: 30}}>{props.value}</div>
+
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+)
+
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
 
   return (
     <div>
-      <Header course={course.name} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
-    </div>
-  )
-}
-
-const Header = (props) => {
-  return (
-    <div>
-      {props.course}
-    </div>
-  )
-}
-
-const Content = (props) => {
-  return (
-    <div>
-      <Part name = {props.parts[0].name} ex = {props.parts[0].exercises} />
-      <Part name = {props.parts[1].name} ex = {props.parts[1].exercises} />
-      <Part name = {props.parts[2].name} ex = {props.parts[2].exercises} />
-    </div>
-  )
-}
-
-const Total = (props) => {
-  return (
-    <div>
-      <p>
-      Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}
-      </p>
-    </div>
-  )
-}
-
-const Part = (props) => {
-  return (
-    <div>
-      <p>
-        {props.name} {props.ex}
-      </p>
+      <Display value = "give feedback" />
+      <Button handleClick={() => setGood(good + 1)} text="good" />
+      <Button handleClick={() => setNeutral(neutral + 1)} text="neutral" />
+      <Button handleClick={() => setBad(bad + 1)} text="bad" />
+      <Display value = "Statistics"/>
+      <div>good {good}</div>
+      <div>neutral {neutral}</div>
+      <div>bad {bad}</div>
     </div>
   )
 }
