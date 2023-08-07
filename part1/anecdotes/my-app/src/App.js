@@ -7,11 +7,35 @@ const Anecdote = (props) => (
   </div>
   )
 
-  const Button = (props) => (
-    <button onClick={props.handleClick}>
-      {props.text}
-    </button>
+const Header = ({name}) => (
+  <h2>
+    {name}
+  </h2>
+)
+
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+)
+
+const Winner = ({anecdotes, points}) => {
+  const highestVoteCount = Math.max(...points)
+  const highestVoteIndex = points.indexOf(highestVoteCount)
+  const highestVoteAnecdote = anecdotes[highestVoteIndex]
+  if (highestVoteCount === 0) {
+    return (
+      <p>No votes yet</p>
+    )
+  }
+  console.log(highestVoteIndex)
+  return (
+    <div>
+      <p>winner {highestVoteAnecdote}</p>
+      <p>has {highestVoteCount} votes</p>
+    </div>
   )
+}
 
 const App = () => {
   const anecdotes = [
@@ -43,9 +67,12 @@ const App = () => {
 
   return (
     <div>
+      <Header name = 'Anecdote of the day'></Header>
       <Anecdote anecdote = {anecdotes[selected]} votesCount = {points[selected]}/>
       <Button handleClick = {handleVoteClick} text = 'vote'/>
       <Button handleClick = {handleAnecdoteClick} text = 'next anecdote'/>
+      <Header name = 'Anecdote with most votes'></Header>
+      <Winner anecdotes = {anecdotes} points = {points}></Winner>
     </div>
   )
 }
