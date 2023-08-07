@@ -5,11 +5,6 @@ const Button = (props) => (
     {props.text}
   </button>
 )
-
-const StatisticLine = (props) => (
-  <div>{props.text} {props.value}</div>
-)
-
 const Statistics = (props) => {
   if (props.good === 0 && props.bad === 0 && props.neutral === 0) {
     return (
