@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personsService from './services/Persons'
 import axios from 'axios'
 
 const DisplayNameNumber = ({name, number}) => (
@@ -16,14 +17,11 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    personsService.getAll()
+    .then(personsReturned => {
+      setPersons(personsReturned)
+    })
   }, [])
-  console.log('render', persons.length, 'persons')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -37,7 +35,12 @@ const App = () => {
       return
     }
 
-    setPersons(persons.concat(personObject))
+    personsService
+    .create(personObject)
+    .then(personReturned => {
+      setPersons(persons.concat(personReturned))
+    })
+
     setNewName('')
     console.log('button clicked', event.target)
   }
