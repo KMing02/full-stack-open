@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'
+import Content from './components/Content'
 import personsService from './services/Persons'
-import axios from 'axios'
 
-const DisplayNameNumber = ({name, number}) => (
-  <div>{name} {number}</div>
-)
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -16,7 +12,6 @@ const App = () => {
   const [filterWord, setFilterWord] = useState('')
 
   useEffect(() => {
-    console.log('effect')
     personsService.getAll()
     .then(personsReturned => {
       setPersons(personsReturned)
@@ -46,20 +41,26 @@ const App = () => {
   }
 
   const handleNameChange = (event) => {
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
     setNewNumber(event.target.value)
   }
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value)
     setFilterWord(event.target.value)
   }
 
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`))
+
+    personsService
+    .delete(person.id)
+    .then(() => {
+      setPersons(persons.filter(p => p.id !== person.id ? person : null))
+    })
+  }
 
   return (
     <div>
@@ -72,10 +73,8 @@ const App = () => {
       <PersonForm addPerson = {addPerson} newName = {newName} handleNameChange = {handleNameChange} handleNumberChange = {handleNumberChange} newNumber = {newNumber}/>
 
       <h2>Numbers</h2>
-      <div>
-        {persons.filter(person => person.name.toLowerCase().includes(filterWord.toLowerCase())).map(p => <DisplayNameNumber key = {p.name} name = {p.name} number = {p.number}/>)}
-      </div>
-      <Persons persons = {persons} filterWord = {filterWord} DisplayNameNumber = {DisplayNameNumber}/>
+
+      <Content persons = {persons} filterWord = {filterWord} deletePerson = {deletePerson}/>
     </div>
   )
 }
