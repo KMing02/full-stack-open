@@ -26,10 +26,13 @@ const App = () => {
     }
 
     if (persons.filter(person => person.name === newName).length > 0) {
-      alert(`${newName} is already added to phonebook`)
-      return
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+        replaceNumber(persons.find(person => person.name === newName), personObject)
+        setNewName('')
+        console.log('button clicked', event.target)
+        return
+      }
     }
-
     personsService
     .create(personObject)
     .then(personReturned => {
@@ -59,6 +62,15 @@ const App = () => {
     .delete(person.id)
     .then(() => {
       setPersons(persons.filter(p => p.id !== person.id ? person : null))
+    })
+  }
+
+  const replaceNumber = (person, personObject) => {
+
+    personsService
+    .update(person.id, personObject)
+    .then(personReturned => {
+      setPersons(persons.map(p => p.id !== person.id ? p : personReturned))
     })
   }
 
