@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Content from './components/Content'
 import personsService from './services/Persons'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterWord, setFilterWord] = useState('')
+  const [notifMessage, setMessage] = useState(null)
+  const [operationStatus, setStatus] = useState(true)
 
   useEffect(() => {
     personsService.getAll()
@@ -37,6 +40,11 @@ const App = () => {
     .create(personObject)
     .then(personReturned => {
       setPersons(persons.concat(personReturned))
+      setStatus(true)
+      setMessage(`Added ${personReturned.name}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     })
 
     setNewName('')
@@ -62,6 +70,11 @@ const App = () => {
     .delete(person.id)
     .then(() => {
       setPersons(persons.filter(p => p.id !== person.id ? person : null))
+      setStatus(true)
+      setMessage(`${person.name} is deleted`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     })
   }
 
@@ -71,12 +84,26 @@ const App = () => {
     .update(person.id, personObject)
     .then(personReturned => {
       setPersons(persons.map(p => p.id !== person.id ? p : personReturned))
+      setStatus(true)
+      setMessage(`Number of ${personReturned.name} is changed`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    })
+    .catch(error => {
+      setStatus(false)
+      setMessage(`Information of ${person.name} has already been removed from server`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message = {notifMessage} success = {operationStatus}/>
 
       <Filter filterWord = {filterWord} handleFilterChange = {handleFilterChange}/>
 

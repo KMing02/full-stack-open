@@ -8,7 +8,7 @@
     {
       "id": 2,
       "content": "Browser can execute only JavaScript",
-      "important": false
+      "important": true
     },
     {
       "id": 3,
@@ -16,14 +16,9 @@
       "important": false
     },
     {
-      "content": "woshishabi",
+      "content": "1111",
       "important": false,
       "id": 4
-    },
-    {
-      "content": "123",
-      "important": true,
-      "id": 5
     }
   ]
 }
