@@ -15,12 +15,11 @@ const Weather = ({data}) => {
     useEffect(() => {
         axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${API_KEY}`)
         .then(res => {
+            console.log(res)
             setInfo(res.data)
         })
         .catch(err => console.log(err))
     }, [lat, lng])
-
-    console.log(weatherInfo)
 
     if (weatherInfo.main === undefined) {
         return('loading...')
@@ -29,6 +28,8 @@ const Weather = ({data}) => {
             <>
                 <h3>{`Weather in ${data.capital}`}</h3>
                 <div>{`temperature ${absoluteToCelsius(weatherInfo.main.temp)} Celsius`}</div>
+                <img src={`https://openweathermap.org/img/wn/${weatherInfo.weather[0].icon}@2x.png`}/>
+                <div>{`wind ${weatherInfo.wind.speed}m/s`}</div>
             </>
         )
     }
