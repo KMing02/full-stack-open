@@ -12,7 +12,6 @@ const Display = ({ allData,filterString }) => {
     }
 
     if ((countryList.length > 1) && (countryList.length < 10)) {
-        console.log(filteredData)
         return (
         <Countries countries = {countryList} data = {filteredData}/>
         )

@@ -1,3 +1,6 @@
+import Weather from "./Weather"
+
+
 const ShowCountry = ({data}) => {
     if (data === undefined) {
         return(null)
@@ -7,6 +10,7 @@ const ShowCountry = ({data}) => {
     const area = data.area
     const languages = Object.values(data.languages)
     const flagUrl = data.flags.png
+
     return (
         <>
         <h2>{name}</h2>
@@ -19,6 +23,7 @@ const ShowCountry = ({data}) => {
         </ul>
 
         <div><img src={flagUrl}/></div>
+        <Weather data = {data}/>
         </>
     )
 }
