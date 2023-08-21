@@ -1,5 +1,6 @@
 import Countries from './Countries'
 import OneCountry from './OneCountry'
+import ShowCountry from './ShowCountry'
 import CountryService from '../Services/CountryService'
 
 const Display = ({ allData,filterString }) => {
@@ -11,21 +12,18 @@ const Display = ({ allData,filterString }) => {
     }
 
     if ((countryList.length > 1) && (countryList.length < 10)) {
+        console.log(filteredData)
         return (
-        <Countries countries = {countryList}/>
+        <Countries countries = {countryList} data = {filteredData}/>
         )
     }
 
     if (countryList.length === 1) {
         const data = filteredData[0]
-        console.log(filteredData[0])
-        const name = data.name.common
-        const capital = data.capital
-        const area = data.area
-        const languages = Object.values(data.languages)
-        const flagUrl = data.flags.png
         return (
-            <OneCountry name = {name} capital = {capital} area = {area} languages={languages} flagUrl = {flagUrl}/>
+            <>
+            <ShowCountry data = {filteredData[0]}/>
+            </>
         )
     }
 
