@@ -1,7 +1,5 @@
 import Countries from './Countries'
-import OneCountry from './OneCountry'
 import ShowCountry from './ShowCountry'
-import CountryService from '../Services/CountryService'
 
 const Display = ({ allData,filterString }) => {
     const filteredData = allData.filter(d => d.name.common.toLowerCase().includes(filterString.toLowerCase()))
@@ -18,7 +16,6 @@ const Display = ({ allData,filterString }) => {
     }
 
     if (countryList.length === 1) {
-        const data = filteredData[0]
         return (
             <>
             <ShowCountry data = {filteredData[0]}/>
