@@ -46,6 +46,10 @@ const App = () => {
         setMessage(null)
       }, 5000)
     })
+    .catch(error => {
+      // this is the way to access the error message
+      console.log(error.response.data.error)
+    })
 
     setNewName('')
     console.log('button clicked', event.target)
@@ -91,6 +95,7 @@ const App = () => {
       }, 5000)
     })
     .catch(error => {
+      console.log(error.response.data.error)
       setStatus(false)
       setMessage(`Information of ${person.name} has already been removed from server`)
       setTimeout(() => {
