@@ -48,6 +48,7 @@ const App = () => {
     })
     .catch(error => {
       // this is the way to access the error message
+      setMessage(error.response.data.error)
       console.log(error.response.data.error)
     })
 
