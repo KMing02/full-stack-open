@@ -56,6 +56,15 @@ const App = () => {
         setNotes(initialNotes)
     })
   }, [])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
   
   const notesToShow = showAll
   ? notes
@@ -71,6 +80,7 @@ const App = () => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
       .catch(error => {
+        console.log(error)
         setErrorMessage(`the note '${note.content}' was already deleted from server`)
         setTimeout(() => {
           setErrorMessage(null)
@@ -86,6 +96,11 @@ const App = () => {
       const user = await loginService.login({
         username, password,
       })
+
+      window.localStorage.setItem(
+        'loggedNoteappUser', JSON.stringify(user)
+      ) 
+      noteService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
