@@ -3,6 +3,9 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 initialBlogs = [
     {
@@ -20,8 +23,13 @@ initialBlogs = [
 ]
 
 beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash("aaaa", 10)
+    const user = new User({ username: 'otto', name: 'diangun', passwordHash: passwordHash})
+    await user.save()
+    
     await Blog.deleteMany({})
-  
     const blogObjects = initialBlogs
       .map(blog => new Blog(blog))
     const promiseArray = blogObjects.map(blog => blog.save())
@@ -42,15 +50,23 @@ test('id is the unique identifier for blogs', async () => {
 })
 
 test('post successfully create new blog', async () => {
+    const res = await api
+    .post('/api/login')
+    .send({ username: 'otto', password: 'aaaa'})
+
+    const token = 'Bearer ' + res.body.token
+
     const toBeCreated = {
         title: 'created blog',
         author: 'creator',
         url: 'www.post.com',
         likes: '0'
     }
+
     await api
         .post('/api/blogs')
         .send(toBeCreated)
+        .set('Authorization', token)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -61,6 +77,12 @@ test('post successfully create new blog', async () => {
 })
 
 test('missing likes property set to 0', async () => {
+    const res = await api
+    .post('/api/login')
+    .send({ username: 'otto', password: 'aaaa'})
+
+    const token = 'Bearer ' + res.body.token
+
     const toBeAdded = {
         title: 'created blog',
         author: 'creator',
@@ -71,6 +93,7 @@ test('missing likes property set to 0', async () => {
     await api
         .post('/api/blogs')
         .send(toBeAdded)
+        .set('Authorization', token)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -81,6 +104,12 @@ test('missing likes property set to 0', async () => {
 })
 
 test('missing title given status 400', async () => {
+    const res = await api
+    .post('/api/login')
+    .send({ username: 'otto', password: 'aaaa'})
+
+    const token = 'Bearer ' + res.body.token
+
     const toBeAdded = {
         author: 'creator',
         url: 'www.notitleblog.com',
@@ -90,10 +119,17 @@ test('missing title given status 400', async () => {
     await api
         .post('/api/blogs')
         .send(toBeAdded)
+        .set('Authorization', token)
         .expect(400)
 })
 
 test('missing url given status 400', async () => {
+    const res = await api
+    .post('/api/login')
+    .send({ username: 'otto', password: 'aaaa'})
+
+    const token = 'Bearer ' + res.body.token
+
     const toBeAdded = {
         title: 'no url blog',
         author: 'creator',
@@ -103,15 +139,23 @@ test('missing url given status 400', async () => {
     await api
         .post('/api/blogs')
         .send(toBeAdded)
+        .set('Authorization', token)
         .expect(400)
 })
 
 test('delete with a valid id', async () => {
+    const res = await api
+    .post('/api/login')
+    .send({ username: 'otto', password: 'aaaa'})
+
+    const token = 'Bearer ' + res.body.token
+
     const blogsAtStart = await Blog.find({})
     const blogToDelete = blogsAtStart[0]
 
     await api
-    .delete(`/api/blogs/${blogToDelete.toJSON().id}`)
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .set('Authorization', token)
     .expect(204)
 
     const blogsAtEnd = (await Blog.find({})).map(b => b.toJSON())
