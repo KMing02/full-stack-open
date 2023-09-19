@@ -1,0 +1,21 @@
+#errMsg {
+    font-size: 28px;
+    color: rgb(249, 3, 3);
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 4px;
+    border-color: rgb(245, 1, 1);
+    background-color: lightgrey;
+    padding: 10px
+}
+
+#createdMsg {
+    font-size: 28px;
+    color: rgb(13, 163, 43);
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 4px;
+    border-color: rgb(13, 145, 77);
+    background-color: lightgrey;
+    padding: 10px
+}
