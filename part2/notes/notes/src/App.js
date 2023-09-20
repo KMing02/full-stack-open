@@ -5,6 +5,8 @@ import Notification from './components/Notification'
 import noteService from './services/notes'
 import loginService from './services/login'
 import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
+import NoteForm from './components/NoteForm'
 
 const Footer = () => {
   const footerStyle = {
@@ -153,12 +155,23 @@ const App = () => {
         <h1>Notes</h1>
         <Notification message = {errorMessage} />
 
-        {!user && loginForm()} 
-        {user && <div>
-          <p>{user.name} logged in</p>
-             {noteForm()}
-        </div>
-        }
+        <Togglable buttonLabel='login'>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleSubmit={handleLogin}
+          />
+        </Togglable>
+
+        <Togglable buttonLabel="new note">
+  <NoteForm
+    onSubmit={addNote}
+    value={newNote}
+    handleChange={handleNoteChange}
+  />
+</Togglable>
         <div>
           <button onClick={() => setShowAll(!showAll)}>
             show {showAll ? 'important' : 'all' }
