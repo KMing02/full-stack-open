@@ -9,15 +9,10 @@ const jwt = require('jsonwebtoken')
 
 initialBlogs = [
     {
-        title: 'test blog 101',
-        author: 'somebody',
-        url: 'www.test.com',
-        likes: '15'
-    },
-    {
         title: 'test blog 102',
         author: 'nobody',
         url: 'www.test1.com',
+        user: {name: '123'},
         likes: '100'
     }
 ]

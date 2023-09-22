@@ -1,4 +1,5 @@
 const blogsRouter = require('express').Router()
+const blog = require('../models/blog')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
@@ -39,7 +40,7 @@ blogsRouter.delete('/api/blogs/:id', userExtractor, async (request, response) =>
     return response.status(404).end('blog with id given does not exist')
   }
 
-  if (blog.user.toString() === user._id.toString()) {
+  if (blog.user.toString() === user.id.toString()) {
     await Blog.findByIdAndRemove(request.params.id)
     return response.status(204).end()
   } else {
@@ -47,7 +48,8 @@ blogsRouter.delete('/api/blogs/:id', userExtractor, async (request, response) =>
   }
 })
 
-blogsRouter.put('/api/blogs/:id', async(request, response) => {
+
+blogsRouter.put('/api/blogs/:id', async (request, response) => {
   const body = request.body
 
   const blog = {
