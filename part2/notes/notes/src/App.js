@@ -111,23 +111,29 @@ const App = () => {
     </Togglable>
   )
 
+  const loginForm = () => {
+    <Togglable buttonLabel='login'>
+      <LoginForm
+        username={username}
+        password={password}
+        handleUsernameChange={({ target }) => setUsername(target.value)}
+        handlePasswordChange={({ target }) => setPassword(target.value)}
+        handleSubmit={handleLogin}
+      />
+    </Togglable>
+  }
+
   return (
     <div>
       <h1>Notes</h1>
       <Notification message = {errorMessage} />
 
-      <Togglable buttonLabel='login'>
-        <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
-          handleSubmit={handleLogin}
-        />
-      </Togglable>
-
-      {noteForm()}
-
+      {!user && loginForm()}
+      {user && <div>
+        <p>{user.name} logged in</p>
+        {noteForm()}
+      </div>
+      }
       <div>
         <button onClick={() => setShowAll(!showAll)}>
             show {showAll ? 'important' : 'all' }
