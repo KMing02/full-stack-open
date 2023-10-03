@@ -17,7 +17,7 @@ const Footer = () => {
   return (
     <div style={footerStyle}>
       <br />
-      <em>Note app, Department of Computer Science, University of Helsinki 2022</em>
+      <em>Note app, Department of Computer Science, University of Helsinki 2023</em>
     </div>
   )
 }
@@ -111,8 +111,8 @@ const App = () => {
     </Togglable>
   )
 
-  const loginForm = () => {
-    <Togglable buttonLabel='login'>
+  const loginForm = () => (
+    <Togglable buttonLabel='log in'>
       <LoginForm
         username={username}
         password={password}
@@ -121,7 +121,7 @@ const App = () => {
         handleSubmit={handleLogin}
       />
     </Togglable>
-  }
+  )
 
   return (
     <div>
