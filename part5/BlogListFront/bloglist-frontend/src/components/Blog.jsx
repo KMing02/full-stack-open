@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import blogs from '../services/blogs'
 
-const Blog = ({ blog, deleteBlog, update, user }) => {
+const Blog = ({ blog, deleteBlog, update, user, setUpdate }) => {
   const [visible, setVisible] = useState(false)
   const buttonLabel = visible ? 'hide' : 'view'
   const showWhenVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = (event) => {
+    setUpdate(Math.floor(Math.random() * 100))
     setVisible(!visible)
   }
 
@@ -19,7 +20,8 @@ const Blog = ({ blog, deleteBlog, update, user }) => {
     marginBottom: 5
   }
 
-  const increaseLikes = async () => {
+  const increaseLikes = async (event) => {
+    event.preventDefault()
     const response = await update(
       blog.id,
       {
@@ -28,19 +30,15 @@ const Blog = ({ blog, deleteBlog, update, user }) => {
       }
     )
     blog = response.data
-  }
-
-  const log = () => {
-    console.log(user.id)
-    console.log(blog.user)
+    setUpdate(Math.floor(Math.random() * 100))
   }
 
   const removeBlog = () => deleteBlog(blog)
 
   return (
-    <div style={blogStyle}>
+    <div id='blog' style={blogStyle}>
       <div className='title-author'>
-        <p>{blog.title} - {blog.author} <button onClick={toggleVisibility}>{buttonLabel}</button></p>
+        <p>{blog.title} - {blog.author} <button id='view' onClick={toggleVisibility}>{buttonLabel}</button></p>
       </div>
       <div style={showWhenVisible}>
         <p className='url'>{blog.url}</p>

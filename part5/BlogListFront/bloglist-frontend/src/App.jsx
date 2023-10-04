@@ -10,6 +10,7 @@ import LoginForm from './components/LoginForm'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
+  const [update, setUpdate] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState(null)
@@ -20,7 +21,7 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
-  }, [blogs])
+  }, [update])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -96,13 +97,15 @@ const App = () => {
     }
   }
 
-  const showBlogs = () => (
-    <div>
-      {blogs.sort((b1, b2) => b2.likes - b1.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} update={blogService.update} user={user}/>
-      )}
-    </div>
-  )
+  const showBlogs = () => {
+    return(
+      <div>
+        {blogs.sort((b1, b2) => b2.likes - b1.likes).map(blog =>
+          <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} update={blogService.update} user={user} setUpdate={setUpdate}/>
+        )}
+      </div>
+    )
+}
 
   const logout = () => {
     window.localStorage.setItem(
@@ -121,12 +124,12 @@ const App = () => {
   )
 
   const createNewBlogs = () => (
-    <div>
-      <Togglable buttonLabel='create blog' ref={createBlogRef}>
-        <CreateBlogForm createNewBlog = {handleNewblog}  />
-      </Togglable>
-    </div>
-  )
+      <div>
+        <Togglable buttonLabel='create blog' buttonid='create' ref={createBlogRef}>
+          <CreateBlogForm createNewBlog = {handleNewblog} setUpdate={setUpdate} />
+        </Togglable>
+      </div>
+    )
 
   return (
     <div>
@@ -137,7 +140,7 @@ const App = () => {
         setUsername={setUsername} username={username} password={password}/>}
 
       {user && <div>
-        <p>{user.name} logged in <button onClick={logout}>log out</button> </p>
+        <p>{user.name} logged in <button id='logout' onClick={logout}>log out</button> </p>
       </div>
       }
       {createNewBlogs()}
